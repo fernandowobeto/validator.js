@@ -1,15 +1,18 @@
 # validator.js
-### 非常抱歉，此库已停止维护，请参考[其他类似项目](https://www.npmjs.com/search?q=laravel%20validation&page=1&ranking=popularity)
+### I am very sorry to announce that I will no longer maintain this project, please refer to [other similar projects](https://www.npmjs.com/search?q=laravel%20validation&page=1&ranking=popularity)
 
 [![npm version](https://badge.fury.io/js/js-validator.svg)](http://badge.fury.io/js/js-validator)
 [![GitHub version](https://badge.fury.io/gh/ppoffice%2Fvalidator.js.svg)](http://badge.fury.io/gh/ppoffice%2Fvalidator.js)
 
-Laravel风格的**JavaScript对象/表单/JSON**验证库。| [English Version](README.en.md) | [Laravel Validation](http://laravel.com/docs/5.0/validation)
-* 支持不同验证规则组合
-* 支持复杂对象的递归验证
-* 支持添加自定义验证器
+A Laravel styled **JavaScript Object/Form/JSON** validation library.
+[Laravel Validation](http://laravel.com/docs/5.0/validation)
+* Support mixin validation rules
+* Support recursive validation on complicate objects
+* Support user-defined validator
 
-## 举个例子
+validator.js is easy to use in form or JSON validation, and it is extensible.
+
+## Example
 ```javascript
 var example = {
       text: 'Hello world!',
@@ -34,18 +37,18 @@ console.log(Validator.validate(example, rules));
 // => {status: 'failed', [{object: [Object], field: "comments", rule: "array"}]}
 ```
 
-## 基本用法
+## Basic Usage
 
-### 引入validator.js（原生JavaScript）
+### Import validator.js library(for native JavaScript code)
 ```html
-<script type="text/javascript" src="./src/validator.js"></script>
+<script type="text/javascript" src="./validator.js"></script>
 ```
-或
+Or
 ```html
 <script type="text/javascript" src="./dist/validator.min.js"></script>
 ```
 
-### 初始化（非原生JavaScript）
+### Initialization(skip this if you are using native JavaScript code)
 
 #### Node.js
 ```bash
@@ -57,7 +60,7 @@ var validator = require('js-validator');
 
 #### RequireJS
 ```javascript
-requirejs(["../src/validator"], function(validator) {
+requirejs(["./validator"], function(validator) {
   ...
 });
 ```
@@ -70,8 +73,8 @@ define(function (require, exports, module) {
 });
 ```
 
-### 制定验证规则
-对于同一个对象属性，你可以并列制定几个不同的规则进行限定，使用`|`作为不同规则间的分割符。
+### Make rules
+You can have different rules for a single field, using `|` as the separator.
 ```javascript
 var rules = {
   text: 'required|string',
@@ -79,9 +82,9 @@ var rules = {
   comments: 'integer',
 };
 ```
-**关于转义**
+**About string escape**
 
-当验证规则中必须出现'|', ':' 或者 ','时，请对在它们之前添加'\\\\'，如：
+When '|', ':' or ',' has to be in your rule's values, please add '\\\\' in front of them, just like this:
 ```javascript
 var person = {
       nickname: 'Harry|Poter'
@@ -91,19 +94,19 @@ var person = {
     }
 ```
 
-### 验证
+### Validate the rules
 ```javascript
 // Validator.validate if you are using native JavaScript code
 validator.validate(object_to_be_tested, rules);
 ```
-**验证结果**
+**Result**
 
-返回一个包含status和rejects属性的对象。
+Return an object with 'status' and 'rejects' properties.
 
-如果所有验证规则都满足，则status为'success'，rejects为空数组；否则status为'failed'，rejects为验证失败规则的详细信息。
+If the validated object meets all the rules, the 'status' property will be 'success' and the 'rejects' array will be empty; otherwise 'status' will be 'failed' and 'rejects' will contain details that causes the failure.
 
-### 添加验证器
-使用add方法为Validator添加验证器，第一个参数为验证器名称，第二个参数为验证方法，可以为正则表达式对象或者函数。当验证方法为函数时，其第一个参数为待验证的对象，第二个参数为当前验证域的值，后面的参数根据需求而定，验证成功时结果返回true。
+### Add a validator
+You can use add() Function to add a validator, along with a name as its first argument and a validation method as second argument. Validation method can either be RegExp object or Function. When it's a Function, its first argument is the object to be tested, the second argument is the value of current validating field, and it should return `true` when the validation succeeded.
 ```javascript
 // Validator.add if you are using native JavaScript code
 validator.add('older_than', function (object, value, age) {
@@ -115,162 +118,161 @@ var rules = {
 };
 ```
 
-### 配置
+### Configuration
 ```javascript
 // Validator.setConfig if you are using native JavaScript code
 validator.setConfig({...});
 ```
-### 可用配置
+### Available configurations
 
 #### resumeOnFailed
-**默认值** false
+**Default**: false
 
-当某条验证失败时是否继续其他规则的验证。为true时继续验证。
+Whether the validation continues when it failed on any rule.
 
-## 可用的验证规则
+## Available Validation Rules
 
 #### accepted
-验证域必须为yes、on、1、或者true。 这个规则常用语验证“同意使用条款”表单。
+The field under validation must be yes, on, 1, or true. This is useful for validating "Terms of Service" acceptance.
 
 
 #### after:date
-验证的日期域的日期必须在指定日期之后。
+The field under validation must be a value after a given date.
 
 
 #### alpha
-验证域必须由纯英文字符组成。
+The field under validation must be entirely alphabetic characters.
 
 
 #### alpha_dash
-验证域必须由英文字符、数字、中划线或者下划线组成。
+The field under validation must be entirely alphabetic characters.
 
 
 #### alpha_num
-验证域必须由英文字符或者数字组成。
+The field under validation must be entirely alpha-numeric characters.
 
 
 #### array
-验证域必须为数组对象。
+The field under validation must be of type array.
 
 
 #### before:date
-验证的日期域的日期必须在给定日期之前。
+The field under validation must be a value preceding the given date.
 
 
 #### between:min,max
-验证域的值必须在min和max之间，验证域可以是字符串、数字或者文件对象(FileList/File)。文件大小单位为KB。
+The field under validation must have a size between the given min and max. Strings, numerics and files(FileList/File) are evaluated. Files are evaluated in kilobytes.
 
 
 #### boolean
-验证域的值可以看作是布尔值，可以是true，false，1，0，"1"，"0"，'1' and '0'。
+The field under validation must be able to be cast as a boolean. Accepted input are true, false, 1, 0, "1", "0", '1' and '-'.
 
 
 #### date
-验证域必须为日期字符串形式，可以被Date.parse方法解析。
+The field under validation must be a valid date according to the Date.parse function.
 
 
 #### date_format:format
-验证域必须符合制定的日期格式，允许的日期格式参照源代码中的dateFormat方法。
+The field under validation must match the format defined according to the meizz's dateFormat function.
 
 
 #### different:field
-验证域的值必须域指定域的值不同。
+The given field must be different than the field under validation.
 
 
 #### digits:value
-验证域必须为数字，且其位数为给定的位数。
+The field under validation must be numeric and must have an exact length of value.
 
 
 #### digits_between:min,max
-验证域必须为数字，且其位数在min和max之间。
+The field under validation must have a length between the given min and max.
 
 
 #### email
-验证域必须为电子邮件地址格式。
+The field under validation must be formatted as an e-mail address.
 
 
 #### in:foo,bar,...
-验证域的值必须在给定的允许值列表中。
+The field under validation must be included in the given list of values.
 
 
 #### integer
-验证值必须为整数。
+The field under validation must have an integer value.
 
 
 #### ip
-验证值必须为IP地址形式（支持IPv4与IPv6）。
+The field under validation must be formatted as an IP address.
 
 
 #### max:value
-验证域的值必须小于等于max，验证域可以是字符串、数字或者文件对象(FileList/File)。文件大小单位为KB。
+The field under validation must be less than or equal to a maximum value. Strings, numerics and files(FileList/File) are evaluated. Files are evaluated in kilobytes.
 
 
 #### mimes:foo,bar,...
-验证值的扩展名必须在给定的扩展名列表中。
+The string under validation must have a MIME type corresponding to one of the listed extensions.
 
 
 #### min:value
-验证域的值必须大于等于min，验证域可以是字符串、数字或者文件对象(FileList/File)。文件大小单位为KB。
+The field under validation must have a minimum value. Strings, numerics and files(FileList/File) are evaluated. Files are evaluated in kilobytes.
 
 
 #### not_in:foo,bar,...
-验证域的值必须不在给定的值列表中。
+The field under validation must not be included in the given list of values.
 
 
 #### numeric
-验证域必须为数字。
+The field under validation must have a numeric value.
 
 
 #### regex
-验证域必须符合指定的正则表达式（JavaScript风格）。
+The field under validation must match the given regular expression.
 
 
 #### required
-验证域必须存在。
+The field under validation must be present in the input data.
 
 
 #### required_if:field,value,...
-如果给定的域的值等于给定的值，验证域必须存在。这里的条件可以是多个域和值，它们之间的关系为“与”。
+The field under validation must be present if the field is equal to any value. The relationship between each field is AND.
 
 
 #### required_with:foo,bar,...
-如果给定的域之中任何一个存在的话，验证域必须存在。
+The field under validation must be present only if any of the other specified fields are present.
 
 
 #### required_with_all:foo,bar,...
-仅当所有给定的域存在时，验证域必须存在。
+The field under validation must be present only if all of the other specified fields are present.
 
 
 #### required_without:foo,bar,...
-如果给定的域之中任何一个不存在的话，验证域必须存在。
+The field under validation must be present only when any of the other specified fields are not present.
 
 
 #### required_without_all:foo,bar,...
-仅当所有给定的所有域都不存在时，验证域必须存在。
+The field under validation must be present only when all of the other specified fields are not present.
 
 
 #### same
-验证域的值必须域指定域的值相同。
+The given field must match the field under validation.
 
 
 #### size:value
-验证域的大小必须等于指定大小。对于字符串来说，验证域的字符串长度必须等于给定长度。对于数字来说，验证域的值必须等于给定值。对于文件(FileList/File)来说，文件的大小必须等于给定值（单位为KB）。
+The field under validation must have a size matching the given value. For string data, value corresponds to the number of characters. For numeric data, value corresponds to a given integer value. For file(FileList/File), size corresponds to the file size in kilobytes.
 
 
 #### string
-验证域必须为字符串。
+The field under validation must be a string type.
 
 
 #### url
-验证域必须为URL地址。当前不支持含有非英文（中文等）字符的地址。
+The field under validation must be formatted as an URL. It does not support non-English urls.
 
 
-## 测试文件入口
-`./test/index.html`     原生JavaScript支持测试
+## Demo Entries
+`./test/index.html`     native JavaScript support test
 
-`./test/node.js`        Node.js支持测试
+`./test/node.js`        Node.js support test
 
-`./test/requirejs.html` RequireJS支持测试
+`./test/requirejs.html` RequireJS support test
 
-`./test/seajs.html` Sea.js支持测试
-
+`./test/seajs.html` Sea.js support test
